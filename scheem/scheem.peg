@@ -23,7 +23,7 @@ rightquote =
     spacechar* ")"
 
 comment = 
-    ";;" [^\n]*
+    [ \t]* ";;" [^\n]*
 
 spaceexp = 
     spacechar+ e:expression
