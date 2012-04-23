@@ -1,0 +1,41 @@
+start =
+    fullexpression
+
+fullexpression = 
+    comment f:fullexpression
+        { return f; }
+  / spacechar* e:expression spacechar*
+        { return e; }
+
+expression =
+    "'" e:expression
+        { return ["quote", e]; }
+  / leftquote rightquote
+        { return []; }
+  / leftquote f:expression e:spaceexp* rightquote
+        { return [f].concat(e); }
+  / atom
+
+leftquote = 
+    "(" spacechar*
+
+rightquote = 
+    spacechar* ")"
+
+comment = 
+    ";;" [^\n]*
+
+spaceexp = 
+    spacechar+ e:expression
+        { return e; }
+
+spacechar = 
+    "\n" comment
+  / [ \n\t]
+
+validchar
+    = [-0-9a-zA-Z_?!+\=@#$%^&*/.]
+
+atom =
+    chars:validchar+
+        { return chars.join(""); }
